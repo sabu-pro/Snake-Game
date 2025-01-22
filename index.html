@@ -43,6 +43,8 @@
         let dx = boxSize;
         let dy = 0;
         let score = 0;
+        let snakeColor = '#28a745';
+        let foodColor = '#dc3545';
         let gameInterval;
 
         function drawBox(x, y, color) {
@@ -51,11 +53,11 @@
         }
 
         function drawSnake() {
-            snake.forEach(segment => drawBox(segment.x, segment.y, '#28a745'));
+            snake.forEach(segment => drawBox(segment.x, segment.y, snakeColor));
         }
 
         function drawFood() {
-            drawBox(food.x, food.y, '#dc3545');
+            drawBox(food.x, food.y, foodColor);
         }
 
         function moveSnake() {
@@ -64,6 +66,8 @@
 
             if (head.x === food.x && head.y === food.y) {
                 score++;
+                snakeColor = foodColor; // Change snake color to food color
+                foodColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Generate new random color
                 food = { x: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize, y: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize };
             } else {
                 snake.pop();
