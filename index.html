@@ -28,7 +28,7 @@
         <h1 class="mb-4">Snake Game</h1>
         <canvas id="gameCanvas" width="400" height="400" style="display: none;"></canvas>
         <button id="startButton" class="btn btn-success mt-3">Start Game</button>
-        <p class="mt-3">Use arrow keys to play</p>
+        <p class="mt-3">Use arrow keys or swipe to play</p>
     </div>
 
     <script>
@@ -117,6 +117,53 @@
             } else if (key === 'ArrowRight' && dx === 0) {
                 dx = boxSize;
                 dy = 0;
+            }
+        }
+
+        // Touch gesture detection
+        let startX, startY, endX, endY;
+
+        canvas.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+        });
+
+        canvas.addEventListener('touchend', (event) => {
+            const touch = event.changedTouches[0];
+            endX = touch.clientX;
+            endY = touch.clientY;
+
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            // Determine the swipe direction
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Horizontal swipe
+                if (deltaX > 0 && dx === 0) {
+                    // Swipe right
+                    dx = boxSize;
+                    dy = 0;
+                } else if (deltaX < 0 && dx === 0) {
+                    // Swipe left
+                    dx = -boxSize;
+                    dy = 0;
+                }
+            } else {
+                // Vertical swipe
+                if (deltaY > 0 && dy === 0) {
+                    // Swipe down
+                    dx = 0;
+                    dy = boxSize;
+                } else if (deltaY < 0 && dy === 0) {
+                    // Swipe up
+                    dx = 0;
+                    dy = -boxSize;
+                }
             }
         }
 
